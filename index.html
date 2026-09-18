@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de tarefas</title>
-    <link rel="shortcut icon" href="https://res.cloudinary.com/i4fj6veu/image/upload/v1789754064/icon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="https://res.cloudinary.com/i4fj6veu/image/upload/v1789754064/icon.png"
+        type="image/x-icon">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
@@ -21,9 +22,9 @@
             --title-size: 28px;
             --subTitle-size: 20px;
             --text-size: 16px;
-            
-            --shadow:0  6px 24px rgba(0, 0, 0, 0.1);
-            --radius:8px;
+
+            --shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
             --trasition: ease-in-out 0.09s;
         }
 
@@ -42,6 +43,7 @@
             align-items: center;
             justify-content: center;
             font-size: 16px;
+            
         }
 
         main {
@@ -50,13 +52,16 @@
             padding: 28px;
             border-radius: 12px;
             box-shadow: var(--shadow);
-            height: 80vh;
+            height: 90vh;
+            overflow: auto;
+            scrollbar-width: thin;
+
         }
 
         h1 {
             margin: 0 0 4px;
         }
-        
+
         .title {
             font-size: var(--title-size);
         }
@@ -120,6 +125,7 @@
             user-select: none;
             cursor: pointer;
             position: relative;
+            overflow-wrap: break-word;
         }
 
         ul li:hover {
@@ -151,18 +157,18 @@
         ul li span {
             position: absolute;
             right: 10px;
-            top: 5px;
-            width: 40px;
-            height: 40px;
+            top: 10px;
+            width: 25px;
+            height: 25px;
             font-size: 22px;
             color: #555;
-            line-height: 40px;
+            line-height: 25px;
             text-align: center;
         }
 
         ul li span:hover {
-            background-color: #edeef0;
-            color: var(--error-color);
+            background-color: var(--error-color);
+            color: var(--background-color);
         }
     </style>
 </head>
@@ -188,15 +194,24 @@
     <script>
         const containerList = document.getElementById('list-container');
         const inputText = document.getElementById('inputText');
+        let text = document.createElement("p");
+        text.innerHTML = "Ainda não tem tarefas.";
+
+        if (containerList.children.length === 0) {
+            containerList.appendChild(text);
+        }
 
         function addTask() {
-            if (inputText.value === ''){
+            if (inputText.value === '') {
                 alert("Nenhuma tarefa digitada!");
-            }else {
+            } else {
+                if (text !== "") {
+                    text.innerHTML = "";
+                }
                 let li = document.createElement("li");
                 li.innerHTML = inputText.value;
                 containerList.appendChild(li);
-                
+
                 let span = document.createElement("span");
                 span.innerHTML = "\u00d7";
                 li.appendChild(span);
@@ -204,11 +219,17 @@
             inputText.value = "";
         }
 
-        containerList.addEventListener("click", function(e){
-            if (e.target.tagName === "LI"){
+        containerList.addEventListener("click", function (e) {
+            if (e.target.tagName === "LI") {
                 e.target.classList.toggle("checked");
-            } else if (e.target.tagName === "SPAN"){
+            } else if (e.target.tagName === "SPAN") {
                 e.target.parentElement.remove();
+                console.log(containerList.children.length);
+                
+                if (containerList.children.length === 1) {
+                    text.innerHTML = "Ainda não tem tarefas.";
+                    containerList.appendChild(text);
+                }
             }
         }, false);
 
